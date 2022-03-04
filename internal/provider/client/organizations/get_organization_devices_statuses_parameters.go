@@ -324,11 +324,11 @@ func (o *GetOrganizationDevicesStatusesParams) WriteToRequest(r runtime.ClientRe
 
 	if o.Models != nil {
 
-		// binding items for models
+		// binding items for models[]
 		joinedModels := o.bindParamModels(reg)
 
-		// query array param models
-		if err := r.SetQueryParam("models", joinedModels...); err != nil {
+		// query array param models[]
+		if err := r.SetQueryParam("models[]", joinedModels...); err != nil {
 			return err
 		}
 	}
@@ -368,11 +368,11 @@ func (o *GetOrganizationDevicesStatusesParams) WriteToRequest(r runtime.ClientRe
 
 	if o.ProductTypes != nil {
 
-		// binding items for productTypes
+		// binding items for productTypes[]
 		joinedProductTypes := o.bindParamProductTypes(reg)
 
-		// query array param productTypes
-		if err := r.SetQueryParam("productTypes", joinedProductTypes...); err != nil {
+		// query array param productTypes[]
+		if err := r.SetQueryParam("productTypes[]", joinedProductTypes...); err != nil {
 			return err
 		}
 	}
@@ -450,7 +450,7 @@ func (o *GetOrganizationDevicesStatusesParams) WriteToRequest(r runtime.ClientRe
 	return nil
 }
 
-// bindParamGetOrganizationDevicesStatuses binds the parameter models
+// bindParamGetOrganizationDevicesStatuses binds the parameter models[]
 func (o *GetOrganizationDevicesStatusesParams) bindParamModels(formats strfmt.Registry) []string {
 	modelsIR := o.Models
 
@@ -461,8 +461,8 @@ func (o *GetOrganizationDevicesStatusesParams) bindParamModels(formats strfmt.Re
 		modelsIC = append(modelsIC, modelsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	modelsIS := swag.JoinByFormat(modelsIC, "")
+	// items.CollectionFormat: "multi"
+	modelsIS := swag.JoinByFormat(modelsIC, "multi")
 
 	return modelsIS
 }
@@ -484,7 +484,7 @@ func (o *GetOrganizationDevicesStatusesParams) bindParamNetworkIds(formats strfm
 	return networkIdsIS
 }
 
-// bindParamGetOrganizationDevicesStatuses binds the parameter productTypes
+// bindParamGetOrganizationDevicesStatuses binds the parameter productTypes[]
 func (o *GetOrganizationDevicesStatusesParams) bindParamProductTypes(formats strfmt.Registry) []string {
 	productTypesIR := o.ProductTypes
 
@@ -495,8 +495,8 @@ func (o *GetOrganizationDevicesStatusesParams) bindParamProductTypes(formats str
 		productTypesIC = append(productTypesIC, productTypesIIV)
 	}
 
-	// items.CollectionFormat: ""
-	productTypesIS := swag.JoinByFormat(productTypesIC, "")
+	// items.CollectionFormat: "multi"
+	productTypesIS := swag.JoinByFormat(productTypesIC, "multi")
 
 	return productTypesIS
 }

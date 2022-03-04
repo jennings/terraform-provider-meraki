@@ -44543,6 +44543,7 @@
           },
           {
             "type": "array",
+            "collectionFormat": "multi",
             "items": {
               "type": "string",
               "enum": [
@@ -44555,16 +44556,17 @@
                 "sensor"
               ]
             },
-            "name": "productTypes",
+            "name": "productTypes[]",
             "in": "query",
             "description": "An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor."
           },
           {
             "type": "array",
+            "collectionFormat": "multi",
             "items": {
               "type": "string"
             },
-            "name": "models",
+            "name": "models[]",
             "in": "query",
             "description": "Optional parameter to filter devices by models."
           },
