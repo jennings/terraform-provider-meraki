@@ -1,4 +1,4 @@
-module github.com/hashicorp/terraform-provider-scaffolding
+module github.com/jennings/terraform-provider-meraki
 
 go 1.15
 
