@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/jennings/terraform-provider-meraki/internal/provider/client/organizations"
@@ -46,11 +47,11 @@ func dataSourceDeviceStatuses() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"mac": &schema.Schema{
+						"serial": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"public_ip": &schema.Schema{
+						"mac": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
@@ -58,32 +59,17 @@ func dataSourceDeviceStatuses() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"wan1_ip": &schema.Schema{
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"wan1_ip_type": &schema.Schema{
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"wan2_ip": &schema.Schema{
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"wan2_ip_type": &schema.Schema{
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"using_cellular_failover": &schema.Schema{
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
 						"tags": &schema.Schema{
-							Type:     schema.TypeList,
+							Type:     schema.TypeSet,
 							Computed: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
+						},
+						"attributes": &schema.Schema{
+							Type:     schema.TypeMap,
+							Computed: true,
+							Elem:     &schema.Schema{},
 						},
 					},
 				},
@@ -117,28 +103,18 @@ func dataSourceDeviceStatusesRead(ctx context.Context, d *schema.ResourceData, m
 		}
 	}
 
+	tflog.Trace(ctx, "requesting organization devices statuses",
+		"organization_id", req.OrganizationID)
+
 	resp, err := pc.MerakiDashboardAPI.Organizations.GetOrganizationDevicesStatuses(&req, nil)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	statuses := make([]map[string]interface{}, 0)
-	for _, device := range resp.Payload {
-		device := device.(map[string]interface{})
-		status := make(map[string]interface{})
-		copyValueIfExists(device, status, "name", "name")
-		copyValueIfExists(device, status, "productType", "product_type")
-		copyValueIfExists(device, status, "mac", "mac")
-		copyValueIfExists(device, status, "publicIp", "public_ip")
-		copyValueIfExists(device, status, "networkId", "network_id")
-		copyValueIfExists(device, status, "wan1Ip", "wan1_ip")
-		copyValueIfExists(device, status, "wan2Ip", "wan2_ip")
-		copyValueIfExists(device, status, "wan1IpType", "wan1_ip_type")
-		copyValueIfExists(device, status, "wan2IpType", "wan2_ip_type")
-		copyValueIfExists(device, status, "usingCellularFailover", "using_cellular_failover")
-		copyValueIfExists(device, status, "tags", "tags")
-		statuses = append(statuses, status)
-	}
+	tflog.Trace(ctx, "request succeeded",
+		"count", len(resp.Payload))
+
+	statuses := mapDeviceStatusesToState(resp)
 
 	if err := d.Set("statuses", statuses); err != nil {
 		return diag.FromErr(err)
@@ -150,8 +126,49 @@ func dataSourceDeviceStatusesRead(ctx context.Context, d *schema.ResourceData, m
 	return diags
 }
 
-func copyValueIfExists(from, to map[string]interface{}, fromKey, toKey string) {
-	if val, ok := from[fromKey]; ok {
-		to[toKey] = val
+func mapDeviceStatusesToState(resp *organizations.GetOrganizationDevicesStatusesOK) []map[string]interface{} {
+	statuses := make([]map[string]interface{}, 0)
+	for _, device := range resp.Payload {
+		device := device.(map[string]interface{})
+		s := mapDeviceStatusToState(device)
+		statuses = append(statuses, s)
 	}
+
+	return statuses
+}
+
+func mapDeviceStatusToState(status map[string]interface{}) map[string]interface{} {
+	state := make(map[string]interface{})
+	attributes := make(map[string]interface{})
+	state["attributes"] = attributes
+
+	for key, value := range status {
+		isAttr := false
+
+		switch key {
+		case "name":
+		case "mac":
+		case "serial":
+		case "tags":
+			// already in snake_case
+
+		// format these as snake_case
+		case "productType":
+			key = "product_type"
+		case "networkId":
+			key = "network_id"
+
+		// everything else goes in the attributes map
+		default:
+			isAttr = true
+		}
+
+		if isAttr {
+			attributes[key] = value
+		} else {
+			state[key] = value
+		}
+	}
+
+	return state
 }
