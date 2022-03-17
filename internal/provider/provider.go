@@ -52,7 +52,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	host, ok := os.LookupEnv("MERAKI_HOST")
 	if !ok {
-		if !data.Host.Unknown {
+		if data.Host.Unknown {
 			resp.Diagnostics.AddError("Meraki host must be constant", "Meraki host must be a constant value")
 			return
 		}
@@ -65,7 +65,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	apiKey, ok := os.LookupEnv("MERAKI_API_KEY")
 	if !ok {
-		if !data.ApiKey.Unknown {
+		if data.ApiKey.Unknown {
 			resp.Diagnostics.AddError("Meraki API key must be constant", "Meraki API key must be a constant value")
 			return
 		}
@@ -92,7 +92,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 
 func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
 	return map[string]tfsdk.DataSourceType{
-		"scaffolding_example": exampleDataSourceType{},
+		"meraki_device_statuses": deviceStatusesDataSourceType{},
 	}, nil
 }
 
