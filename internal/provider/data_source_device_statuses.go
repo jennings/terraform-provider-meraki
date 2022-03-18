@@ -38,6 +38,18 @@ func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Sche
 					ElemType: types.StringType,
 				},
 			},
+			"tags": {
+				MarkdownDescription: "Filter for device tags",
+				Optional:            true,
+				Type: types.ListType{
+					ElemType: types.StringType,
+				},
+			},
+			"match_all_tags": {
+				MarkdownDescription: "Whether the filter should only match devices that contain all listed tags.",
+				Optional:            true,
+				Type:                types.BoolType,
+			},
 			"values": {
 				MarkdownDescription: "List of device statuses returned from the Meraki API",
 				Computed:            true,
@@ -109,12 +121,19 @@ type deviceStatusesDataSourceData struct {
 	OrganizationID types.Int64                          `tfsdk:"organization_id"`
 	ProductTypes   types.List                           `tfsdk:"product_types"`
 	Models         types.List                           `tfsdk:"models"`
+	Tags           types.List                           `tfsdk:"tags"`
+	MatchAllTags   types.Bool                           `tfsdk:"match_all_tags"`
 	Values         []deviceStatusesValuesDataSourceData `tfsdk:"values"`
 }
 
 type deviceStatusesDataSource struct {
 	provider provider
 }
+
+var (
+	withAnyTags = "withAnyTags"
+	withAllTags = "withAllTags"
+)
 
 func (d deviceStatusesDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
 	var data deviceStatusesDataSourceData
@@ -169,6 +188,29 @@ func (d deviceStatusesDataSource) Read(ctx context.Context, req tfsdk.ReadDataSo
 				continue
 			}
 			rq.Models = append(rq.Models, mStr)
+		}
+	}
+	if !data.Tags.Null {
+		rq.Tags = make([]string, 0, len(data.Tags.Elems))
+		for _, t := range data.Tags.Elems {
+			t, err := t.ToTerraformValue(ctx)
+			if err != nil {
+				resp.Diagnostics.AddError("could not convert tag value to Terraform value", err.Error())
+				continue
+			}
+			var tStr string
+			err = t.As(&tStr)
+			if err != nil {
+				resp.Diagnostics.AddError("could not convert tag value to string", err.Error())
+				continue
+			}
+			rq.Tags = append(rq.Tags, tStr)
+		}
+
+		if !data.MatchAllTags.Null && data.MatchAllTags.Value {
+			rq.TagsFilterType = &withAllTags
+		} else {
+			rq.TagsFilterType = &withAnyTags
 		}
 	}
 

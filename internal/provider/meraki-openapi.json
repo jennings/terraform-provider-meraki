@@ -44575,7 +44575,8 @@
             "items": {
               "type": "string"
             },
-            "name": "tags",
+            "collectionFormat": "multi",
+            "name": "tags[]",
             "in": "query",
             "description": "An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below)."
           },

@@ -111,17 +111,17 @@ type GetOrganizationDevicesStatusesParams struct {
 	*/
 	Statuses []string
 
-	/* Tags.
-
-	   An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
-	*/
-	Tags []string
-
 	/* TagsFilterType.
 
 	   An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
 	*/
 	TagsFilterType *string
+
+	/* Tags.
+
+	   An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
+	*/
+	Tags []string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -275,17 +275,6 @@ func (o *GetOrganizationDevicesStatusesParams) SetStatuses(statuses []string) {
 	o.Statuses = statuses
 }
 
-// WithTags adds the tags to the get organization devices statuses params
-func (o *GetOrganizationDevicesStatusesParams) WithTags(tags []string) *GetOrganizationDevicesStatusesParams {
-	o.SetTags(tags)
-	return o
-}
-
-// SetTags adds the tags to the get organization devices statuses params
-func (o *GetOrganizationDevicesStatusesParams) SetTags(tags []string) {
-	o.Tags = tags
-}
-
 // WithTagsFilterType adds the tagsFilterType to the get organization devices statuses params
 func (o *GetOrganizationDevicesStatusesParams) WithTagsFilterType(tagsFilterType *string) *GetOrganizationDevicesStatusesParams {
 	o.SetTagsFilterType(tagsFilterType)
@@ -295,6 +284,17 @@ func (o *GetOrganizationDevicesStatusesParams) WithTagsFilterType(tagsFilterType
 // SetTagsFilterType adds the tagsFilterType to the get organization devices statuses params
 func (o *GetOrganizationDevicesStatusesParams) SetTagsFilterType(tagsFilterType *string) {
 	o.TagsFilterType = tagsFilterType
+}
+
+// WithTags adds the tags to the get organization devices statuses params
+func (o *GetOrganizationDevicesStatusesParams) WithTags(tags []string) *GetOrganizationDevicesStatusesParams {
+	o.SetTags(tags)
+	return o
+}
+
+// SetTags adds the tags to the get organization devices statuses params
+func (o *GetOrganizationDevicesStatusesParams) SetTags(tags []string) {
+	o.Tags = tags
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -416,17 +416,6 @@ func (o *GetOrganizationDevicesStatusesParams) WriteToRequest(r runtime.ClientRe
 		}
 	}
 
-	if o.Tags != nil {
-
-		// binding items for tags
-		joinedTags := o.bindParamTags(reg)
-
-		// query array param tags
-		if err := r.SetQueryParam("tags", joinedTags...); err != nil {
-			return err
-		}
-	}
-
 	if o.TagsFilterType != nil {
 
 		// query param tagsFilterType
@@ -441,6 +430,17 @@ func (o *GetOrganizationDevicesStatusesParams) WriteToRequest(r runtime.ClientRe
 			if err := r.SetQueryParam("tagsFilterType", qTagsFilterType); err != nil {
 				return err
 			}
+		}
+	}
+
+	if o.Tags != nil {
+
+		// binding items for tags[]
+		joinedTags := o.bindParamTags(reg)
+
+		// query array param tags[]
+		if err := r.SetQueryParam("tags[]", joinedTags...); err != nil {
+			return err
 		}
 	}
 
@@ -535,7 +535,7 @@ func (o *GetOrganizationDevicesStatusesParams) bindParamStatuses(formats strfmt.
 	return statusesIS
 }
 
-// bindParamGetOrganizationDevicesStatuses binds the parameter tags
+// bindParamGetOrganizationDevicesStatuses binds the parameter tags[]
 func (o *GetOrganizationDevicesStatusesParams) bindParamTags(formats strfmt.Registry) []string {
 	tagsIR := o.Tags
 
@@ -546,8 +546,8 @@ func (o *GetOrganizationDevicesStatusesParams) bindParamTags(formats strfmt.Regi
 		tagsIC = append(tagsIC, tagsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	tagsIS := swag.JoinByFormat(tagsIC, "")
+	// items.CollectionFormat: "multi"
+	tagsIS := swag.JoinByFormat(tagsIC, "multi")
 
 	return tagsIS
 }
