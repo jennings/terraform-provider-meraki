@@ -229,7 +229,7 @@ func mapDeviceStatusToState(status map[string]interface{}, diags diag.Diagnostic
 				diags.AddWarning("unexpected data type", fmt.Sprintf("expected '%v' to be string, got: %T", key, value))
 				continue
 			}
-			state.Attributes[key] = types.String{Value: v}
+			state.Serial = types.String{Value: v}
 
 		case "tags":
 			value, ok := value.([]interface{})
@@ -249,7 +249,15 @@ func mapDeviceStatusToState(status map[string]interface{}, diags diag.Diagnostic
 			}
 			state.Tags = elems
 
-		// format these as snake_case
+		case "model":
+			model, ok := value.(string)
+			if !ok {
+				diags.AddWarning("unexpected data type", fmt.Sprintf("expected '%v' to be string, got: %T", key, value))
+				continue
+			}
+			state.Model = types.String{Value: model}
+			continue
+
 		case "productType":
 			productType, ok := value.(string)
 			if !ok {
@@ -261,7 +269,11 @@ func mapDeviceStatusToState(status map[string]interface{}, diags diag.Diagnostic
 
 		// everything else goes in the attributes map
 		default:
-			state.Attributes[key] = types.String{Value: fmt.Sprintf("%v", value)}
+			if value == nil {
+				state.Attributes[key] = types.String{Null: true}
+			} else {
+				state.Attributes[key] = types.String{Value: fmt.Sprintf("%v", value)}
+			}
 		}
 	}
 
