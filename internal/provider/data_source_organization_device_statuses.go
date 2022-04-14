@@ -11,9 +11,9 @@ import (
 	"github.com/jennings/terraform-provider-meraki/internal/provider/client/organizations"
 )
 
-type deviceStatusesDataSourceType struct{}
+type organizationDeviceStatusesDataSourceType struct{}
 
-func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t organizationDeviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Example data source",
@@ -99,15 +99,15 @@ func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Sche
 	}, nil
 }
 
-func (t deviceStatusesDataSourceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t organizationDeviceStatusesDataSourceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return deviceStatusesDataSource{
+	return organizationDeviceStatusesDataSource{
 		provider: provider,
 	}, diags
 }
 
-type deviceStatusesValuesDataSourceData struct {
+type organizationDeviceStatusesValuesDataSourceData struct {
 	Name        types.String            `tfsdk:"name"`
 	Serial      types.String            `tfsdk:"serial"`
 	ProductType types.String            `tfsdk:"product_type"`
@@ -117,16 +117,16 @@ type deviceStatusesValuesDataSourceData struct {
 	Attributes  map[string]types.String `tfsdk:"attributes"`
 }
 
-type deviceStatusesDataSourceData struct {
-	OrganizationID types.Int64                          `tfsdk:"organization_id"`
-	ProductTypes   types.List                           `tfsdk:"product_types"`
-	Models         types.List                           `tfsdk:"models"`
-	Tags           types.List                           `tfsdk:"tags"`
-	MatchAllTags   types.Bool                           `tfsdk:"match_all_tags"`
-	Values         []deviceStatusesValuesDataSourceData `tfsdk:"values"`
+type organizationDeviceStatusesDataSourceData struct {
+	OrganizationID types.Int64                                      `tfsdk:"organization_id"`
+	ProductTypes   types.List                                       `tfsdk:"product_types"`
+	Models         types.List                                       `tfsdk:"models"`
+	Tags           types.List                                       `tfsdk:"tags"`
+	MatchAllTags   types.Bool                                       `tfsdk:"match_all_tags"`
+	Values         []organizationDeviceStatusesValuesDataSourceData `tfsdk:"values"`
 }
 
-type deviceStatusesDataSource struct {
+type organizationDeviceStatusesDataSource struct {
 	provider provider
 }
 
@@ -135,8 +135,8 @@ var (
 	withAllTags = "withAllTags"
 )
 
-func (d deviceStatusesDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var data deviceStatusesDataSourceData
+func (d organizationDeviceStatusesDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var data organizationDeviceStatusesDataSourceData
 
 	diags := req.Config.Get(ctx, &data)
 	resp.Diagnostics.Append(diags...)
@@ -230,8 +230,8 @@ func (d deviceStatusesDataSource) Read(ctx context.Context, req tfsdk.ReadDataSo
 	resp.Diagnostics.Append(diags...)
 }
 
-func mapDeviceStatusesToState(resp *organizations.GetOrganizationDevicesStatusesOK, diags diag.Diagnostics) ([]deviceStatusesValuesDataSourceData, error) {
-	l := make([]deviceStatusesValuesDataSourceData, 0, len(resp.Payload))
+func mapDeviceStatusesToState(resp *organizations.GetOrganizationDevicesStatusesOK, diags diag.Diagnostics) ([]organizationDeviceStatusesValuesDataSourceData, error) {
+	l := make([]organizationDeviceStatusesValuesDataSourceData, 0, len(resp.Payload))
 
 	for _, device := range resp.Payload {
 		device := device.(map[string]interface{})
@@ -245,13 +245,13 @@ func mapDeviceStatusesToState(resp *organizations.GetOrganizationDevicesStatuses
 	return l, nil
 }
 
-func mapDeviceStatusToState(status map[string]interface{}, diags diag.Diagnostics) (deviceStatusesValuesDataSourceData, error) {
-	state := deviceStatusesValuesDataSourceData{
+func mapDeviceStatusToState(status map[string]interface{}, diags diag.Diagnostics) (organizationDeviceStatusesValuesDataSourceData, error) {
+	state := organizationDeviceStatusesValuesDataSourceData{
 		Attributes: make(map[string]types.String),
 	}
 	raw_json, err := json.Marshal(status)
 	if err != nil {
-		return deviceStatusesValuesDataSourceData{}, err
+		return organizationDeviceStatusesValuesDataSourceData{}, err
 	}
 	state.RawJson = types.String{Value: string(raw_json)}
 

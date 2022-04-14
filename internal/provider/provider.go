@@ -92,8 +92,8 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 
 func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
 	return map[string]tfsdk.DataSourceType{
-		"meraki_device_statuses":      deviceStatusesDataSourceType{},
-		"meraki_organization_devices": organizationDevicesDataSourceType{},
+		"meraki_organization_devices":         organizationDevicesDataSourceType{},
+		"meraki_organization_device_statuses": organizationDeviceStatusesDataSourceType{},
 	}, nil
 }
 
