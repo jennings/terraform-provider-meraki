@@ -63,15 +63,15 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		}
 	}
 
-	apiKey, ok := os.LookupEnv("MERAKI_API_KEY")
-	if !ok {
-		if data.ApiKey.Unknown {
-			resp.Diagnostics.AddError("Meraki API key must be constant", "Meraki API key must be a constant value")
-			return
-		}
-		if !data.ApiKey.Null {
-			apiKey = data.ApiKey.Value
-		} else {
+	var apiKey string
+	if !data.ApiKey.Null {
+		apiKey = data.ApiKey.Value
+	} else if data.ApiKey.Unknown {
+		resp.Diagnostics.AddError("Meraki API key must be constant", "Meraki API key must be a constant value")
+		return
+	} else {
+		apiKey, ok = os.LookupEnv("MERAKI_API_KEY")
+		if !ok {
 			resp.Diagnostics.AddError("Missing Meraki API key", "Meraki API key must be specified in configuration or in the MERAKI_API_KEY environment variable.")
 			return
 		}
@@ -92,7 +92,8 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 
 func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
 	return map[string]tfsdk.DataSourceType{
-		"meraki_device_statuses": deviceStatusesDataSourceType{},
+		"meraki_device_statuses":      deviceStatusesDataSourceType{},
+		"meraki_organization_devices": organizationDevicesDataSourceType{},
 	}, nil
 }
 

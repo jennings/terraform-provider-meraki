@@ -153,17 +153,17 @@ type GetOrganizationDevicesParams struct {
 	*/
 	StartingAfter *string
 
-	/* Tags.
-
-	   Optional parameter to filter devices by tags.
-	*/
-	Tags []string
-
 	/* TagsFilterType.
 
 	   Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
 	*/
 	TagsFilterType *string
+
+	/* Tags.
+
+	   Optional parameter to filter devices by tags.
+	*/
+	Tags []string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -394,17 +394,6 @@ func (o *GetOrganizationDevicesParams) SetStartingAfter(startingAfter *string) {
 	o.StartingAfter = startingAfter
 }
 
-// WithTags adds the tags to the get organization devices params
-func (o *GetOrganizationDevicesParams) WithTags(tags []string) *GetOrganizationDevicesParams {
-	o.SetTags(tags)
-	return o
-}
-
-// SetTags adds the tags to the get organization devices params
-func (o *GetOrganizationDevicesParams) SetTags(tags []string) {
-	o.Tags = tags
-}
-
 // WithTagsFilterType adds the tagsFilterType to the get organization devices params
 func (o *GetOrganizationDevicesParams) WithTagsFilterType(tagsFilterType *string) *GetOrganizationDevicesParams {
 	o.SetTagsFilterType(tagsFilterType)
@@ -414,6 +403,17 @@ func (o *GetOrganizationDevicesParams) WithTagsFilterType(tagsFilterType *string
 // SetTagsFilterType adds the tagsFilterType to the get organization devices params
 func (o *GetOrganizationDevicesParams) SetTagsFilterType(tagsFilterType *string) {
 	o.TagsFilterType = tagsFilterType
+}
+
+// WithTags adds the tags to the get organization devices params
+func (o *GetOrganizationDevicesParams) WithTags(tags []string) *GetOrganizationDevicesParams {
+	o.SetTags(tags)
+	return o
+}
+
+// SetTags adds the tags to the get organization devices params
+func (o *GetOrganizationDevicesParams) SetTags(tags []string) {
+	o.Tags = tags
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -477,11 +477,11 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 
 	if o.Macs != nil {
 
-		// binding items for macs
+		// binding items for macs[]
 		joinedMacs := o.bindParamMacs(reg)
 
-		// query array param macs
-		if err := r.SetQueryParam("macs", joinedMacs...); err != nil {
+		// query array param macs[]
+		if err := r.SetQueryParam("macs[]", joinedMacs...); err != nil {
 			return err
 		}
 	}
@@ -505,11 +505,11 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 
 	if o.Models != nil {
 
-		// binding items for models
+		// binding items for models[]
 		joinedModels := o.bindParamModels(reg)
 
-		// query array param models
-		if err := r.SetQueryParam("models", joinedModels...); err != nil {
+		// query array param models[]
+		if err := r.SetQueryParam("models[]", joinedModels...); err != nil {
 			return err
 		}
 	}
@@ -533,11 +533,11 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 
 	if o.NetworkIds != nil {
 
-		// binding items for networkIds
+		// binding items for networkIds[]
 		joinedNetworkIds := o.bindParamNetworkIds(reg)
 
-		// query array param networkIds
-		if err := r.SetQueryParam("networkIds", joinedNetworkIds...); err != nil {
+		// query array param networkIds[]
+		if err := r.SetQueryParam("networkIds[]", joinedNetworkIds...); err != nil {
 			return err
 		}
 	}
@@ -566,33 +566,33 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 
 	if o.ProductTypes != nil {
 
-		// binding items for productTypes
+		// binding items for productTypes[]
 		joinedProductTypes := o.bindParamProductTypes(reg)
 
-		// query array param productTypes
-		if err := r.SetQueryParam("productTypes", joinedProductTypes...); err != nil {
+		// query array param productTypes[]
+		if err := r.SetQueryParam("productTypes[]", joinedProductTypes...); err != nil {
 			return err
 		}
 	}
 
 	if o.SensorAlertProfileIds != nil {
 
-		// binding items for sensorAlertProfileIds
+		// binding items for sensorAlertProfileIds[]
 		joinedSensorAlertProfileIds := o.bindParamSensorAlertProfileIds(reg)
 
-		// query array param sensorAlertProfileIds
-		if err := r.SetQueryParam("sensorAlertProfileIds", joinedSensorAlertProfileIds...); err != nil {
+		// query array param sensorAlertProfileIds[]
+		if err := r.SetQueryParam("sensorAlertProfileIds[]", joinedSensorAlertProfileIds...); err != nil {
 			return err
 		}
 	}
 
 	if o.SensorMetrics != nil {
 
-		// binding items for sensorMetrics
+		// binding items for sensorMetrics[]
 		joinedSensorMetrics := o.bindParamSensorMetrics(reg)
 
-		// query array param sensorMetrics
-		if err := r.SetQueryParam("sensorMetrics", joinedSensorMetrics...); err != nil {
+		// query array param sensorMetrics[]
+		if err := r.SetQueryParam("sensorMetrics[]", joinedSensorMetrics...); err != nil {
 			return err
 		}
 	}
@@ -616,11 +616,11 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 
 	if o.Serials != nil {
 
-		// binding items for serials
+		// binding items for serials[]
 		joinedSerials := o.bindParamSerials(reg)
 
-		// query array param serials
-		if err := r.SetQueryParam("serials", joinedSerials...); err != nil {
+		// query array param serials[]
+		if err := r.SetQueryParam("serials[]", joinedSerials...); err != nil {
 			return err
 		}
 	}
@@ -642,17 +642,6 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 		}
 	}
 
-	if o.Tags != nil {
-
-		// binding items for tags
-		joinedTags := o.bindParamTags(reg)
-
-		// query array param tags
-		if err := r.SetQueryParam("tags", joinedTags...); err != nil {
-			return err
-		}
-	}
-
 	if o.TagsFilterType != nil {
 
 		// query param tagsFilterType
@@ -670,13 +659,24 @@ func (o *GetOrganizationDevicesParams) WriteToRequest(r runtime.ClientRequest, r
 		}
 	}
 
+	if o.Tags != nil {
+
+		// binding items for tags[]
+		joinedTags := o.bindParamTags(reg)
+
+		// query array param tags[]
+		if err := r.SetQueryParam("tags[]", joinedTags...); err != nil {
+			return err
+		}
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
 }
 
-// bindParamGetOrganizationDevices binds the parameter macs
+// bindParamGetOrganizationDevices binds the parameter macs[]
 func (o *GetOrganizationDevicesParams) bindParamMacs(formats strfmt.Registry) []string {
 	macsIR := o.Macs
 
@@ -687,13 +687,13 @@ func (o *GetOrganizationDevicesParams) bindParamMacs(formats strfmt.Registry) []
 		macsIC = append(macsIC, macsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	macsIS := swag.JoinByFormat(macsIC, "")
+	// items.CollectionFormat: "multi"
+	macsIS := swag.JoinByFormat(macsIC, "multi")
 
 	return macsIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter models
+// bindParamGetOrganizationDevices binds the parameter models[]
 func (o *GetOrganizationDevicesParams) bindParamModels(formats strfmt.Registry) []string {
 	modelsIR := o.Models
 
@@ -704,13 +704,13 @@ func (o *GetOrganizationDevicesParams) bindParamModels(formats strfmt.Registry) 
 		modelsIC = append(modelsIC, modelsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	modelsIS := swag.JoinByFormat(modelsIC, "")
+	// items.CollectionFormat: "multi"
+	modelsIS := swag.JoinByFormat(modelsIC, "multi")
 
 	return modelsIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter networkIds
+// bindParamGetOrganizationDevices binds the parameter networkIds[]
 func (o *GetOrganizationDevicesParams) bindParamNetworkIds(formats strfmt.Registry) []string {
 	networkIdsIR := o.NetworkIds
 
@@ -721,13 +721,13 @@ func (o *GetOrganizationDevicesParams) bindParamNetworkIds(formats strfmt.Regist
 		networkIdsIC = append(networkIdsIC, networkIdsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	networkIdsIS := swag.JoinByFormat(networkIdsIC, "")
+	// items.CollectionFormat: "multi"
+	networkIdsIS := swag.JoinByFormat(networkIdsIC, "multi")
 
 	return networkIdsIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter productTypes
+// bindParamGetOrganizationDevices binds the parameter productTypes[]
 func (o *GetOrganizationDevicesParams) bindParamProductTypes(formats strfmt.Registry) []string {
 	productTypesIR := o.ProductTypes
 
@@ -738,13 +738,13 @@ func (o *GetOrganizationDevicesParams) bindParamProductTypes(formats strfmt.Regi
 		productTypesIC = append(productTypesIC, productTypesIIV)
 	}
 
-	// items.CollectionFormat: ""
-	productTypesIS := swag.JoinByFormat(productTypesIC, "")
+	// items.CollectionFormat: "multi"
+	productTypesIS := swag.JoinByFormat(productTypesIC, "multi")
 
 	return productTypesIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter sensorAlertProfileIds
+// bindParamGetOrganizationDevices binds the parameter sensorAlertProfileIds[]
 func (o *GetOrganizationDevicesParams) bindParamSensorAlertProfileIds(formats strfmt.Registry) []string {
 	sensorAlertProfileIdsIR := o.SensorAlertProfileIds
 
@@ -755,13 +755,13 @@ func (o *GetOrganizationDevicesParams) bindParamSensorAlertProfileIds(formats st
 		sensorAlertProfileIdsIC = append(sensorAlertProfileIdsIC, sensorAlertProfileIdsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	sensorAlertProfileIdsIS := swag.JoinByFormat(sensorAlertProfileIdsIC, "")
+	// items.CollectionFormat: "multi"
+	sensorAlertProfileIdsIS := swag.JoinByFormat(sensorAlertProfileIdsIC, "multi")
 
 	return sensorAlertProfileIdsIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter sensorMetrics
+// bindParamGetOrganizationDevices binds the parameter sensorMetrics[]
 func (o *GetOrganizationDevicesParams) bindParamSensorMetrics(formats strfmt.Registry) []string {
 	sensorMetricsIR := o.SensorMetrics
 
@@ -772,13 +772,13 @@ func (o *GetOrganizationDevicesParams) bindParamSensorMetrics(formats strfmt.Reg
 		sensorMetricsIC = append(sensorMetricsIC, sensorMetricsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	sensorMetricsIS := swag.JoinByFormat(sensorMetricsIC, "")
+	// items.CollectionFormat: "multi"
+	sensorMetricsIS := swag.JoinByFormat(sensorMetricsIC, "multi")
 
 	return sensorMetricsIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter serials
+// bindParamGetOrganizationDevices binds the parameter serials[]
 func (o *GetOrganizationDevicesParams) bindParamSerials(formats strfmt.Registry) []string {
 	serialsIR := o.Serials
 
@@ -789,13 +789,13 @@ func (o *GetOrganizationDevicesParams) bindParamSerials(formats strfmt.Registry)
 		serialsIC = append(serialsIC, serialsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	serialsIS := swag.JoinByFormat(serialsIC, "")
+	// items.CollectionFormat: "multi"
+	serialsIS := swag.JoinByFormat(serialsIC, "multi")
 
 	return serialsIS
 }
 
-// bindParamGetOrganizationDevices binds the parameter tags
+// bindParamGetOrganizationDevices binds the parameter tags[]
 func (o *GetOrganizationDevicesParams) bindParamTags(formats strfmt.Registry) []string {
 	tagsIR := o.Tags
 
@@ -806,8 +806,8 @@ func (o *GetOrganizationDevicesParams) bindParamTags(formats strfmt.Registry) []
 		tagsIC = append(tagsIC, tagsIIV)
 	}
 
-	// items.CollectionFormat: ""
-	tagsIS := swag.JoinByFormat(tagsIC, "")
+	// items.CollectionFormat: "multi"
+	tagsIS := swag.JoinByFormat(tagsIC, "multi")
 
 	return tagsIS
 }
