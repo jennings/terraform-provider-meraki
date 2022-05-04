@@ -11,7 +11,9 @@
       "mode": "debug",
       "program": "${workspaceFolder}",
       "args": ["-debug"],
-      "env": {}
+      "env": {
+        "HTTPS_PROXY": "http://localhost:8888"
+      }
     }
   ]
 }
