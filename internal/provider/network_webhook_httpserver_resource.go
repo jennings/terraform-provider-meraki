@@ -245,8 +245,6 @@ func (r networkWebhookHttpserverResource) Delete(ctx context.Context, req tfsdk.
 	if err != nil {
 		resp.Diagnostics.AddError("Client error", fmt.Sprintf("error with network request: %v", err))
 	}
-
-	resp.State.RemoveResource(ctx)
 }
 
 func (r networkWebhookHttpserverResource) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
