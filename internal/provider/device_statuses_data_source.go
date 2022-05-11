@@ -11,9 +11,9 @@ import (
 	"github.com/jennings/terraform-provider-meraki/internal/provider/client/organizations"
 )
 
-type organizationDeviceStatusesDataSourceType struct{}
+type deviceStatusesDataSourceType struct{}
 
-func (t organizationDeviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Example data source",
@@ -99,7 +99,7 @@ func (t organizationDeviceStatusesDataSourceType) GetSchema(ctx context.Context)
 	}, nil
 }
 
-func (t organizationDeviceStatusesDataSourceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t deviceStatusesDataSourceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
 	return organizationDeviceStatusesDataSource{
