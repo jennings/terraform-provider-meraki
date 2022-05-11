@@ -17,8 +17,9 @@ func TestAccDataSourceOrganizationDevicesWithFilters(t *testing.T) {
 			// Read testing
 			{
 				Config: `
+				 	data "meraki_organizations" "o" {}
 					data "meraki_organization_devices" "test" {
-						organization_id = 123
+						organization_id = tolist(data.meraki_organizations.o)[0].id
 						product_types = ["appliance"]
 					}`,
 				Check: resource.ComposeAggregateTestCheckFunc(
