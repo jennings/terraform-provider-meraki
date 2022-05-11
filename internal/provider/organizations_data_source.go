@@ -59,12 +59,6 @@ type organizationsDataSourceData struct {
 	Values []organization `tfsdk:"values"`
 }
 
-type organization struct {
-	ID   string `tfsdk:"id"`
-	Name string `tfsdk:"name"`
-	URL  string `tfsdk:"url"`
-}
-
 func (d organizationsDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
 	res, err := d.provider.client.Organizations.GetOrganizations(&organizations.GetOrganizationsParams{
 		Context: ctx,

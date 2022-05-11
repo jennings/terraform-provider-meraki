@@ -22,7 +22,7 @@ func (t devicesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 			"organization_id": {
 				MarkdownDescription: "Organization ID",
 				Required:            true,
-				Type:                types.Int64Type,
+				Type:                types.StringType,
 			},
 			"product_types": {
 				MarkdownDescription: "Filter for device product types",
@@ -118,7 +118,7 @@ type organizationDevicesValueDataSourceData struct {
 }
 
 type organizationDevicesDataSourceData struct {
-	OrganizationID types.Int64                              `tfsdk:"organization_id"`
+	OrganizationID types.String                             `tfsdk:"organization_id"`
 	ProductTypes   types.List                               `tfsdk:"product_types"`
 	Models         types.List                               `tfsdk:"models"`
 	Tags           types.List                               `tfsdk:"tags"`
