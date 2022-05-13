@@ -2,6 +2,7 @@ package provider
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -10,20 +11,20 @@ import (
 )
 
 func TestAccDataSourceOrganizationDevicesWithFilters(t *testing.T) {
+	vars := readTestVars(t)
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Read testing
 			{
-				Config: `
-				 	data "meraki_organizations" "o" {}
-					data "meraki_organization_devices" "test" {
-						organization_id = tolist(data.meraki_organizations.o)[0].id
+				Config: fmt.Sprintf(`
+					data "meraki_devices" "test" {
+						organization_id = "%v"
 						product_types = ["appliance"]
-					}`,
+					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("data.meraki_organization_devices.test", "id", "example-id"),
+					resource.TestCheckResourceAttrSet("data.meraki_devices.test", "values"),
 				),
 			},
 		},
@@ -31,18 +32,19 @@ func TestAccDataSourceOrganizationDevicesWithFilters(t *testing.T) {
 }
 
 func TestAccDataSourceOrganizationDevices(t *testing.T) {
+	vars := readTestVars(t)
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Read testing
 			{
-				Config: `
-					data "meraki_organization_devices" "test" {
-						organization_id = 123
-					}`,
+				Config: fmt.Sprintf(`
+					data "meraki_devices" "test" {
+						organization_id = "%v"
+					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("data.meraki_device_statuses.test", "id", "example-id"),
+					resource.TestCheckResourceAttrSet("data.meraki_device_statuses.test", "values"),
 				),
 			},
 		},

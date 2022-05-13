@@ -19,6 +19,11 @@ func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Sche
 		MarkdownDescription: "Example data source",
 
 		Attributes: map[string]tfsdk.Attribute{
+			"id": {
+				MarkdownDescription: "Ignored, required by acceptance tests",
+				Computed:            true,
+				Type:                types.Int64Type,
+			},
 			"organization_id": {
 				MarkdownDescription: "Organization ID",
 				Required:            true,
@@ -118,6 +123,7 @@ type organizationDeviceStatusesValuesDataSourceData struct {
 }
 
 type organizationDeviceStatusesDataSourceData struct {
+	ID             types.Int64                                      `tfsdk:"id"`
 	OrganizationID types.String                                     `tfsdk:"organization_id"`
 	ProductTypes   types.List                                       `tfsdk:"product_types"`
 	Models         types.List                                       `tfsdk:"models"`
