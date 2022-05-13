@@ -2,6 +2,7 @@ package provider
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -11,19 +12,20 @@ import (
 )
 
 func TestAccDataSourceDeviceStatusesWithFilters(t *testing.T) {
+	vars := readTestVars(t)
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Read testing
 			{
-				Config: `
+				Config: fmt.Sprintf(`
 					data "meraki_device_statuses" "test" {
-						organization_id = 123
+						organization_id = %q
 						product_types = ["appliance"]
-					}`,
+					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("data.meraki_device_statuses.test", "id", "example-id"),
+					resource.TestCheckResourceAttrSet("data.meraki_device_statuses.test", "values"),
 				),
 			},
 		},
@@ -31,18 +33,19 @@ func TestAccDataSourceDeviceStatusesWithFilters(t *testing.T) {
 }
 
 func TestAccDataSourceDeviceStatuses(t *testing.T) {
+	vars := readTestVars(t)
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Read testing
 			{
-				Config: `
+				Config: fmt.Sprintf(`
 					data "meraki_device_statuses" "test" {
-						organization_id = 123
-					}`,
+						organization_id = %q
+					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("data.meraki_device_statuses.test", "id", "example-id"),
+					resource.TestCheckResourceAttrSet("data.meraki_device_statuses.test", "values"),
 				),
 			},
 		},

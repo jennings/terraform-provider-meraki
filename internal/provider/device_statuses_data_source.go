@@ -50,6 +50,11 @@ func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Sche
 				Optional:            true,
 				Type:                types.BoolType,
 			},
+			"id": {
+				MarkdownDescription: "Not used, required by acceptance tests",
+				Optional:            true,
+				Type:                types.StringType,
+			},
 			"values": {
 				MarkdownDescription: "List of device statuses returned from the Meraki API",
 				Computed:            true,
@@ -124,6 +129,7 @@ type organizationDeviceStatusesDataSourceData struct {
 	Tags           types.List                                       `tfsdk:"tags"`
 	MatchAllTags   types.Bool                                       `tfsdk:"match_all_tags"`
 	Values         []organizationDeviceStatusesValuesDataSourceData `tfsdk:"values"`
+	ID             types.String                                     `tfsdk:"id"`
 }
 
 type organizationDeviceStatusesDataSource struct {

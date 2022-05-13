@@ -2,24 +2,23 @@ package provider
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
 func TestAccNetworkWebhookHttpserverResource(t *testing.T) {
-	networkId := os.Getenv("MERAKI_NETWORK_ID")
+	vars := readTestVars(t)
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccNetworkWebhookHttpserverResourceConfig("one", networkId),
+				Config: testAccNetworkWebhookHttpserverResourceConfig("one", vars.NetworkID),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "name", "one"),
-					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "network_id", networkId),
+					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "network_id", vars.NetworkID),
 					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "id", "example-id"),
 				),
 			},
@@ -31,7 +30,7 @@ func TestAccNetworkWebhookHttpserverResource(t *testing.T) {
 			},
 			// Update and Read testing
 			{
-				Config: testAccNetworkWebhookHttpserverResourceConfig("two", networkId),
+				Config: testAccNetworkWebhookHttpserverResourceConfig("two", vars.NetworkID),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "name", "two"),
 				),
@@ -44,8 +43,9 @@ func TestAccNetworkWebhookHttpserverResource(t *testing.T) {
 func testAccNetworkWebhookHttpserverResourceConfig(name, networkID string) string {
 	return fmt.Sprintf(`
 resource "meraki_network_webhook_httpserver" "test" {
-  name = %[1]q
-  network_id = %[1]q
+  name       = %q
+  network_id = %q
+  url        = "https://example.com/%[1]s"
 }
 `, name, networkID)
 }
