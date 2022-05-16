@@ -96,6 +96,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"meraki_organizations":   organizationsDataSourceType{},
 		"meraki_devices":         devicesDataSourceType{},
 		"meraki_device_statuses": deviceStatusesDataSourceType{},
+		"meraki_networks":        networksDataSourceType{},
 	}, nil
 }
 
