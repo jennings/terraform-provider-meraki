@@ -15,37 +15,48 @@ func TestAccNetworkWebhookHttpserverResource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccNetworkWebhookHttpserverResourceConfig("one", vars.NetworkID),
+				Config: fmt.Sprintf(`
+					resource "meraki_network_webhook_httpserver" "test" {
+						name          = "one"
+						network_id    = %q
+						url           = "https://example.com/test"
+						shared_secret = "one"
+					}`, vars.NetworkID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "name", "one"),
+					resource.TestCheckResourceAttrSet("meraki_network_webhook_httpserver.test", "id"),
 					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "network_id", vars.NetworkID),
-					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "id", "example-id"),
+					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "name", "one"),
+					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "shared_secret", "one"),
 				),
 			},
-			// ImportState testing
-			{
-				ResourceName:      "meraki_network_webhook_httpserver.test",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
+			// // ImportState testing
+			// {
+			// 	ResourceName:      "meraki_network_webhook_httpserver.test",
+			// 	ImportState:       true,
+			// 	ImportStateVerify: true,
+			// 	ImportStateIdFunc: func(s *terraform.State) (string, error) {
+			// 		r := s.Children("root").Resources["meraki_network_webhook_httpserver"]
+			// 		return "", nil
+			// 	},
+			// 	ImportStateVerifyIgnore: []string{"shared_secret"},
+			// },
 			// Update and Read testing
 			{
-				Config: testAccNetworkWebhookHttpserverResourceConfig("two", vars.NetworkID),
+				Config: fmt.Sprintf(`
+					resource "meraki_network_webhook_httpserver" "test" {
+						name          = "two"
+						network_id    = %q
+						url           = "https://example.com/test"
+						shared_secret = "two"
+					}`, vars.NetworkID),
 				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttrSet("meraki_network_webhook_httpserver.test", "id"),
+					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "network_id", vars.NetworkID),
 					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "name", "two"),
+					resource.TestCheckResourceAttr("meraki_network_webhook_httpserver.test", "shared_secret", "two"),
 				),
 			},
 			// Delete testing automatically occurs in TestCase
 		},
 	})
-}
-
-func testAccNetworkWebhookHttpserverResourceConfig(name, networkID string) string {
-	return fmt.Sprintf(`
-resource "meraki_network_webhook_httpserver" "test" {
-  name       = %q
-  network_id = %q
-  url        = "https://example.com/%[1]s"
-}
-`, name, networkID)
 }

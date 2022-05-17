@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
@@ -53,6 +54,9 @@ func (t networkWebhookHttpserverResourceType) GetSchema(ctx context.Context) (tf
 				MarkdownDescription: "Optional shared secret that can be used in the payload template to authenticate the request.",
 				Optional:            true,
 				Type:                types.StringType,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.UseStateForUnknown(),
+				},
 			},
 			"payload_template_id": {
 				MarkdownDescription: "Payload template ID to send. Defaults to wpt_00001",
@@ -150,6 +154,11 @@ func (r networkWebhookHttpserverResource) Read(ctx context.Context, req tfsdk.Re
 	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read example, got error: %s", err))
 	//     return
 	// }
+	if state.ID.Null || state.ID.Unknown || state.ID.Value == "" {
+		resp.Diagnostics.AddError("State error", fmt.Sprintf("Expected state to have ID but had value: %v", state.ID))
+		return
+	}
+
 	res, err := r.provider.client.Networks.GetNetworkWebhooksHTTPServer(&networks.GetNetworkWebhooksHTTPServerParams{
 		Context:      ctx,
 		NetworkID:    state.NetworkID.Value,
@@ -248,7 +257,16 @@ func (r networkWebhookHttpserverResource) Delete(ctx context.Context, req tfsdk.
 }
 
 func (r networkWebhookHttpserverResource) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+	parts := strings.Split(req.ID, ",")
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+		resp.Diagnostics.AddError(
+			"Unexpected import identifier",
+			fmt.Sprintf("Expected identifier with format 'network_id,id', got: %q", req.ID),
+		)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("network_id"), parts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("id"), parts[1])...)
 }
 
 func buildNetworkWebhookHttpserverResourceData(data *networkWebhookHttpserverResourceData, res merakiResponse) error {
