@@ -1,7 +1,6 @@
 package provider
 
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
@@ -20,17 +19,4 @@ func testAccPreCheck(t *testing.T) {
 	// You can add code here to run prior to any test case execution, for example assertions
 	// about the appropriate environment variables being set are common to see in a pre-check
 	// function.
-}
-
-func readTestVars(t *testing.T) *testVars {
-	return &testVars{
-
-		OrganizationID: os.Getenv("MERAKI_ORGANIZATION_ID"),
-		NetworkID:      os.Getenv("MERAKI_NETWORK_ID"),
-	}
-}
-
-type testVars struct {
-	OrganizationID string
-	NetworkID      string
 }
