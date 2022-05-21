@@ -75,6 +75,6 @@ jobs:
           TF_ACC: "1"
           MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
           MERAKI_ORGANIZATION_ID: ${{ secrets.MERAKI_ORGANIZATION_ID }}
-          MERAKI_NETWORK_ID ${{ secrets.MERAKI_NETWORK_ID }}
+          MERAKI_NETWORK_ID: ${{ secrets.MERAKI_NETWORK_ID }}
         run: go test -v -cover ./internal/provider/
         timeout-minutes: 10
