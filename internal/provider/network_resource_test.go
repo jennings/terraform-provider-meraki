@@ -9,8 +9,8 @@ import (
 
 func TestAccNetworkResource(t *testing.T) {
 	vars := readTestVars(t)
-	name1 := generateName("one-")
-	name2 := generateName("two-")
+	name1 := generateName("one")
+	name2 := generateName("two")
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

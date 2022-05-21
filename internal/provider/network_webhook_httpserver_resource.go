@@ -89,7 +89,7 @@ type networkWebhookHttpserverResourceData struct {
 }
 
 type networkWebhookHttpserverResource struct {
-	provider provider
+	*provider
 }
 
 func (r networkWebhookHttpserverResource) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {

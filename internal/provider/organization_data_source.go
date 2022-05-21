@@ -46,7 +46,7 @@ func (t organizationDataSourceType) NewDataSource(ctx context.Context, in tfsdk.
 }
 
 type organizationDataSource struct {
-	provider provider
+	*provider
 }
 
 type organization struct {

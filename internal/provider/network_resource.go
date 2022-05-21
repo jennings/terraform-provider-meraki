@@ -82,7 +82,7 @@ type networkResourceData struct {
 }
 
 type networkResource struct {
-	provider provider
+	*provider
 }
 
 func (r networkResource) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
@@ -108,11 +108,20 @@ func (r networkResource) Create(ctx context.Context, req tfsdk.CreateResourceReq
 	if !plan.Tags.Unknown {
 		params.CreateOrganizationNetwork.Tags = setToStringArray(plan.Tags)
 	}
+
+	tflog.Trace(ctx, "creating network", map[string]interface{}{
+		"organization_id": params.OrganizationID,
+		"name":            params.CreateOrganizationNetwork.Name,
+	})
 	res, err := r.provider.client.Organizations.CreateOrganizationNetwork(&params, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Client error", fmt.Sprintf("unable to create network: %v", err))
 		return
 	}
+	tflog.Trace(ctx, "created network", map[string]interface{}{
+		"organization_id": params.OrganizationID,
+		"name":            params.CreateOrganizationNetwork.Name,
+	})
 
 	var state networkResourceData
 	buildNetworkFromPayload(&plan, &state, res.Payload)
@@ -121,12 +130,7 @@ func (r networkResource) Create(ctx context.Context, req tfsdk.CreateResourceReq
 		return
 	}
 
-	// write logs using the tflog package
-	// see https://pkg.go.dev/github.com/hashicorp/terraform-plugin-log/tflog
-	// for more information
-	tflog.Trace(ctx, "created a resource")
-
-	diags = resp.State.Set(ctx, &plan)
+	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -150,7 +154,9 @@ func buildNetworkFromPayload(plan, data *networkResourceData, payload interface{
 		data.ProductTypes.Elems[i] = types.String{Value: pt.(string)}
 	}
 
-	if plan != nil && !plan.Tags.Null {
+	if plan != nil && plan.Tags.Null {
+		data.Tags = types.Set{Null: true, ElemType: types.StringType}
+	} else {
 		tags := p["tags"].([]interface{})
 		data.Tags = types.Set{ElemType: types.StringType, Elems: make([]attr.Value, len(tags))}
 		for i, t := range tags {
@@ -235,10 +241,17 @@ func (r networkResource) Delete(ctx context.Context, req tfsdk.DeleteResourceReq
 		return
 	}
 
-	_, err := r.provider.client.Networks.DeleteNetwork(&networks.DeleteNetworkParams{
-		Context:   ctx,
-		NetworkID: state.ID.Value,
-	}, nil)
+	err := func() error {
+		r.provider.deleteNetworkMutex.Lock()
+		defer func() {
+			r.provider.deleteNetworkMutex.Unlock()
+		}()
+		_, err := r.provider.client.Networks.DeleteNetwork(&networks.DeleteNetworkParams{
+			Context:   ctx,
+			NetworkID: state.ID.Value,
+		}, nil)
+		return err
+	}()
 	if err != nil {
 		resp.Diagnostics.AddError("Client error", fmt.Sprintf("error with network request: %v", err))
 	}

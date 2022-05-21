@@ -61,7 +61,7 @@ type networksDataSourceData struct {
 }
 
 type networksDataSource struct {
-	provider provider
+	*provider
 }
 
 func (d networksDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {

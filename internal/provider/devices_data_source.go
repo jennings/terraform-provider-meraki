@@ -133,7 +133,7 @@ type organizationDevicesDataSourceData struct {
 }
 
 type organizationDevicesDataSource struct {
-	provider provider
+	*provider
 }
 
 func (d organizationDevicesDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {

@@ -133,7 +133,7 @@ type organizationDeviceStatusesDataSourceData struct {
 }
 
 type organizationDeviceStatusesDataSource struct {
-	provider provider
+	*provider
 }
 
 var (

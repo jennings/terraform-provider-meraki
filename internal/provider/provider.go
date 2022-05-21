@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"sync"
 
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
@@ -33,6 +34,9 @@ type provider struct {
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
+
+	// deleteNetworkMutex ensures multiple networks are not deleted simultaneously.
+	deleteNetworkMutex sync.Mutex
 }
 
 // providerData can be used to store data from the Terraform configuration.
@@ -132,7 +136,7 @@ func New(version string) func() tfsdk.Provider {
 // this helper can be skipped and the provider type can be directly type
 // asserted (e.g. provider: in.(*provider)), however using this can prevent
 // potential panics.
-func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
+func convertProviderType(in tfsdk.Provider) (*provider, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	p, ok := in.(*provider)
@@ -142,7 +146,7 @@ func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
 			"Unexpected Provider Instance Type",
 			fmt.Sprintf("While creating the data source or resource, an unexpected provider type (%T) was received. This is always a bug in the provider code and should be reported to the provider developers.", p),
 		)
-		return provider{}, diags
+		return nil, diags
 	}
 
 	if p == nil {
@@ -150,8 +154,8 @@ func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
 			"Unexpected Provider Instance Type",
 			"While creating the data source or resource, an unexpected empty provider instance was received. This is always a bug in the provider code and should be reported to the provider developers.",
 		)
-		return provider{}, diags
+		return nil, diags
 	}
 
-	return *p, diags
+	return p, diags
 }

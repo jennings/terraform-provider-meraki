@@ -20,6 +20,6 @@ type testVars struct {
 	NetworkID      string
 }
 
-func generateName(prefix string) string {
-	return fmt.Sprintf("%s%d", prefix, rand.Uint64())
+func generateName(slug string) string {
+	return fmt.Sprintf("tfacc-%s-%d", slug, rand.Uint32())
 }
