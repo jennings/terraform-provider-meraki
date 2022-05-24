@@ -20,9 +20,9 @@ func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Sche
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
-				MarkdownDescription: "Ignored, required by acceptance tests",
+				MarkdownDescription: "Organization ID",
 				Computed:            true,
-				Type:                types.Int64Type,
+				Type:                types.StringType,
 			},
 			"organization_id": {
 				MarkdownDescription: "Organization ID",
@@ -123,7 +123,7 @@ type organizationDeviceStatusesValuesDataSourceData struct {
 }
 
 type organizationDeviceStatusesDataSourceData struct {
-	ID             types.Int64                                      `tfsdk:"id"`
+	ID             types.String                                     `tfsdk:"id"`
 	OrganizationID types.String                                     `tfsdk:"organization_id"`
 	ProductTypes   types.List                                       `tfsdk:"product_types"`
 	Models         types.List                                       `tfsdk:"models"`
@@ -231,6 +231,9 @@ func (d organizationDeviceStatusesDataSource) Read(ctx context.Context, req tfsd
 		resp.Diagnostics.AddError("unable to map device statuses", err.Error())
 		return
 	}
+
+	// Resources are required to have an "id" attribute
+	data.ID = data.OrganizationID
 
 	diags = resp.State.Set(ctx, &data)
 	resp.Diagnostics.Append(diags...)

@@ -17,6 +17,11 @@ func (t networksDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, di
 		MarkdownDescription: "Networks data source.",
 
 		Attributes: map[string]tfsdk.Attribute{
+			"id": {
+				MarkdownDescription: "Organization ID",
+				Computed:            true,
+				Type:                types.StringType,
+			},
 			"organization_id": {
 				MarkdownDescription: "Organization ID",
 				Required:            true,
@@ -56,6 +61,7 @@ type network struct {
 }
 
 type networksDataSourceData struct {
+	ID             types.String `tfsdk:"id"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	Values         []network    `tfsdk:"values"`
 }
@@ -97,6 +103,9 @@ func (d networksDataSource) Read(ctx context.Context, req tfsdk.ReadDataSourceRe
 		resp.Diagnostics.AddError("unable to map device statuses", err.Error())
 		return
 	}
+
+	// Resources are required to have an "id" attribute
+	data.ID = data.OrganizationID
 
 	diags = resp.State.Set(ctx, &data)
 	resp.Diagnostics.Append(diags...)
