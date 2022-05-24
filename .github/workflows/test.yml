@@ -6,10 +6,10 @@ name: Tests
 on:
   pull_request:
     paths-ignore:
-      - 'README.md'
+      - "README.md"
   push:
     paths-ignore:
-      - 'README.md'
+      - "README.md"
 
 # Testing only needs permissions to read the repository contents.
 permissions:
@@ -19,7 +19,7 @@ permissions:
 env:
   # Go language version to use for building. This value should also be updated
   # in the release workflow if changed.
-  GO_VERSION: '1.17'
+  GO_VERSION: "1.17"
 
 jobs:
   # Ensure project builds before running testing matrix
@@ -42,7 +42,9 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
       - uses: actions/checkout@v3
-      - run: go generate ./...
+      # this is "go generate ./..." upstream, but we use go generate to build an
+      # OpenAPI client library and it takes forever to execute
+      - run: go generate .
       - name: git diff
         run: |
           git diff --compact-summary --exit-code || \
@@ -59,8 +61,8 @@ jobs:
       matrix:
         # list whatever Terraform versions here you would like to support
         terraform:
-          - '1.0.*'
-          - '1.1.*'
+          - "1.0.*"
+          - "1.1.*"
     steps:
       - uses: actions/setup-go@v3
         with:
