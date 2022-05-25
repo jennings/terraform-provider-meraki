@@ -57,6 +57,7 @@ func (t networkResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 			"tags": {
 				MarkdownDescription: "Tags",
 				Optional:            true,
+				Computed:            true,
 				Type: types.SetType{
 					ElemType: types.StringType,
 				},

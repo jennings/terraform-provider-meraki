@@ -24,7 +24,7 @@ func TestAccDataSourceOrganizationDevicesWithFilters(t *testing.T) {
 						product_types = ["appliance"]
 					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("data.meraki_devices.test", "values"),
+					resource.TestCheckResourceAttrSet("data.meraki_devices.test", "values.#"),
 				),
 			},
 		},
@@ -44,7 +44,7 @@ func TestAccDataSourceOrganizationDevices(t *testing.T) {
 						organization_id = "%v"
 					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("data.meraki_device_statuses.test", "values"),
+					resource.TestCheckResourceAttrSet("data.meraki_devices.test", "values.#"),
 				),
 			},
 		},

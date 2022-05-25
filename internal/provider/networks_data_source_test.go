@@ -20,7 +20,7 @@ func TestAccNetworksDataSource(t *testing.T) {
 						organization_id = "%v"
 					}`, vars.OrganizationID),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrSet("data.meraki_networks.test", "values"),
+					resource.TestCheckResourceAttrSet("data.meraki_networks.test", "values.#"),
 				),
 			},
 		},
