@@ -15,8 +15,7 @@ type devicesDataSourceType struct{}
 
 func (t devicesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Example data source",
+		MarkdownDescription: "Use this data source to retrieve a list of devices in an organization.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

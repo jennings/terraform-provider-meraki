@@ -19,8 +19,7 @@ type networkResourceType struct{}
 
 func (t networkResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "A Meraki network",
+		MarkdownDescription: "Manages a Meraki network.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

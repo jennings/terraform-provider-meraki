@@ -3,12 +3,12 @@
 page_title: "meraki_organization Data Source - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  Organization data
+  Use this data source to query information about an organization.
 ---
 
 # meraki_organization (Data Source)
 
-Organization data
+Use this data source to query information about an organization.
 
 
 

@@ -15,8 +15,7 @@ type deviceStatusesDataSourceType struct{}
 
 func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Example data source",
+		MarkdownDescription: "Use this data source to retrieve a list of device statuses for an organization.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -30,21 +29,21 @@ func (t deviceStatusesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Sche
 				Type:                types.StringType,
 			},
 			"product_types": {
-				MarkdownDescription: "Filter for device product types",
+				MarkdownDescription: "Filter for device product types.",
 				Optional:            true,
 				Type: types.ListType{
 					ElemType: types.StringType,
 				},
 			},
 			"models": {
-				MarkdownDescription: "Filter for device models",
+				MarkdownDescription: "Filter for device models.",
 				Optional:            true,
 				Type: types.ListType{
 					ElemType: types.StringType,
 				},
 			},
 			"tags": {
-				MarkdownDescription: "Filter for device tags",
+				MarkdownDescription: "Filter for device tags.",
 				Optional:            true,
 				Type: types.ListType{
 					ElemType: types.StringType,

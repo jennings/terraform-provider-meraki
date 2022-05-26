@@ -15,7 +15,7 @@ type organizationDataSourceType struct{}
 
 func (t organizationDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		MarkdownDescription: "Organization data",
+		MarkdownDescription: "Use this data source to query information about an organization.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

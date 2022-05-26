@@ -3,12 +3,12 @@
 page_title: "meraki_network_webhook_httpserver Resource - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  An HTTP Server registered to receive webhooks.
+  Manages an HTTP Server registered to receive webhooks for a network.
 ---
 
 # meraki_network_webhook_httpserver (Resource)
 
-An HTTP Server registered to receive webhooks.
+Manages an HTTP Server registered to receive webhooks for a network.
 
 
 

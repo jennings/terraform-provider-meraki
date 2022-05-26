@@ -3,12 +3,12 @@
 page_title: "meraki_devices Data Source - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  Example data source
+  Use this data source to retrieve a list of devices in an organization.
 ---
 
 # meraki_devices (Data Source)
 
-Example data source
+Use this data source to retrieve a list of devices in an organization.
 
 
 

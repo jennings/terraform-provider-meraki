@@ -3,12 +3,12 @@
 page_title: "meraki_networks Data Source - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  Networks data source.
+  Use this data source to retrieve a list of networks in an organization.
 ---
 
 # meraki_networks (Data Source)
 
-Networks data source.
+Use this data source to retrieve a list of networks in an organization.
 
 
 

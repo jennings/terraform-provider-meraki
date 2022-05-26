@@ -3,12 +3,12 @@
 page_title: "meraki_network Resource - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  A Meraki network
+  Manages a Meraki network.
 ---
 
 # meraki_network (Resource)
 
-A Meraki network
+Manages a Meraki network.
 
 
 

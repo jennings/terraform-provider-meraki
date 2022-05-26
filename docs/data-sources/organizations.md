@@ -3,12 +3,12 @@
 page_title: "meraki_organizations Data Source - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  Organizations available using the given API key.
+  Use this data source to retrieve a list of organizations.
 ---
 
 # meraki_organizations (Data Source)
 
-Organizations available using the given API key.
+Use this data source to retrieve a list of organizations.
 
 
 

@@ -14,7 +14,7 @@ type networksDataSourceType struct{}
 
 func (t networksDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		MarkdownDescription: "Networks data source.",
+		MarkdownDescription: "Use this data source to retrieve a list of networks in an organization.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

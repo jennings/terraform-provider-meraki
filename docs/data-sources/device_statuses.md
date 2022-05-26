@@ -3,12 +3,12 @@
 page_title: "meraki_device_statuses Data Source - terraform-provider-meraki"
 subcategory: ""
 description: |-
-  Example data source
+  Use this data source to retrieve a list of device statuses for an organization.
 ---
 
 # meraki_device_statuses (Data Source)
 
-Example data source
+Use this data source to retrieve a list of device statuses for an organization.
 
 
 
@@ -22,9 +22,9 @@ Example data source
 ### Optional
 
 - `match_all_tags` (Boolean) Whether the filter should only match devices that contain all listed tags.
-- `models` (List of String) Filter for device models
-- `product_types` (List of String) Filter for device product types
-- `tags` (List of String) Filter for device tags
+- `models` (List of String) Filter for device models.
+- `product_types` (List of String) Filter for device product types.
+- `tags` (List of String) Filter for device tags.
 
 ### Read-Only
 

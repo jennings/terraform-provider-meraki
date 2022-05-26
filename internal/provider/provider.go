@@ -109,12 +109,12 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"host": {
-				MarkdownDescription: "Host name of the Meraki API",
+				MarkdownDescription: "Host name of the Meraki API. Defaults to `api.meraki.com`. This can also be sourced from the `MERAKI_HOST` environment variable.",
 				Optional:            true,
 				Type:                types.StringType,
 			},
 			"api_key": {
-				MarkdownDescription: "Meraki API key",
+				MarkdownDescription: "Meraki API key. This can also be sourced from the `MERAKI_API_KEY` environment variable.",
 				Optional:            true,
 				Type:                types.StringType,
 				Sensitive:           true,

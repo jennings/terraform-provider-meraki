@@ -23,5 +23,5 @@ provider "scaffolding" {
 
 ### Optional
 
-- `api_key` (String, Sensitive) Meraki API key
-- `host` (String) Host name of the Meraki API
+- `api_key` (String, Sensitive) Meraki API key. This can also be sourced from the `MERAKI_API_KEY` environment variable.
+- `host` (String) Host name of the Meraki API. Defaults to `api.meraki.com`. This can also be sourced from the `MERAKI_HOST` environment variable.

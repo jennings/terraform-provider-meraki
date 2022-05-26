@@ -15,7 +15,7 @@ type organizationsDataSourceType struct{}
 func (t organizationsDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Organizations available using the given API key.",
+		MarkdownDescription: "Use this data source to retrieve a list of organizations.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"values": {

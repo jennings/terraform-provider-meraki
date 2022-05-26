@@ -17,8 +17,7 @@ type networkWebhookHttpserverResourceType struct{}
 
 func (t networkWebhookHttpserverResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "An HTTP Server registered to receive webhooks.",
+		MarkdownDescription: "Manages an HTTP Server registered to receive webhooks for a network.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
