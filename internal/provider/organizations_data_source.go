@@ -37,7 +37,7 @@ func (t organizationsDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schem
 						Computed:            true,
 						Type:                types.StringType,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
