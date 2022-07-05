@@ -97,7 +97,7 @@ func (t devicesDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 						Computed:            true,
 						Type:                types.StringType,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil

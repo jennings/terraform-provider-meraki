@@ -41,7 +41,7 @@ func (t networksDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema, di
 						Computed:            true,
 						Type:                types.StringType,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
